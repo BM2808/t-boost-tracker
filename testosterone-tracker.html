@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>T-BOOST 30 Day Challenge</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #080808;
+  --dark: #101010;
+  --card: #161616;
+  --card2: #1c1c1c;
+  --border: #242424;
+  --gold: #c9a84c;
+  --gold-light: #e8c96a;
+  --gold-dim: #6b5520;
+  --gold-glow: rgba(201,168,76,0.15);
+  --text: #efefef;
+  --muted: #555;
+  --muted2: #888;
+  --done-bg: #181408;
+  --green: #4caf82;
+}
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav {
+  background: var(--dark);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-inner {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 4px;
+  color: var(--gold);
+}
+
+.logo em { color: #fff; font-style: normal; }
+
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: #0d0d0d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.nav-tab {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  background: transparent;
+}
+
+.nav-tab.active {
+  background: var(--gold);
+  color: #000;
+}
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── TODAY PAGE ── */
+.today-header {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+}
+
+.day-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.day-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  line-height: 1;
+}
+
+.day-title span {
+  font-size: 16px;
+  color: var(--muted2);
+  letter-spacing: 2px;
+  display: block;
+}
+
+.streak-pill {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 8px 14px;
+  text-align: center;
+}
+
+.streak-fire {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.streak-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.streak-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* Progress */
+.progress-section {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0 20px 16px;
+}
+
+.prog-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.prog-meta strong { color: var(--gold); }
+
+.prog-track {
+  height: 3px;
+  background: #1e1e1e;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dim), var(--gold-light));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+
+/* Habits */
+.habits-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 4px 16px 120px;
+}
+
+.cat-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--gold-dim);
+  padding: 16px 4px 8px;
+  border-bottom: 1px solid #181818;
+  margin-bottom: 8px;
+}
+
+.habit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 14px;
+  margin-bottom: 7px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.1s;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.habit:active { transform: scale(0.98); }
+
+.habit.done {
+  background: var(--done-bg);
+  border-color: var(--gold-dim);
+}
+
+.cb {
+  width: 24px;
+  height: 24px;
+  border: 2px solid #2e2e2e;
+  border-radius: 6px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.habit.done .cb {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+
+.ck {
+  opacity: 0;
+  transform: scale(0.4);
+  transition: all 0.2s;
+  color: #000;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.habit.done .ck { opacity: 1; transform: scale(1); }
+
+.habit-info { flex: 1; min-width: 0; }
+
+.habit-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.3;
+  transition: color 0.2s;
+}
+
+.habit.done .habit-name { color: var(--gold-light); }
+
+.habit-desc {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.habit-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  color: #2a2a2a;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.habit.done .habit-pts { color: var(--gold); }
+
+/* ── FOOTER ── */
+.footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--dark);
+  border-top: 1px solid var(--border);
+  padding: 12px 20px 18px;
+  z-index: 50;
+}
+
+.footer-inner {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.score-block { flex: 1; }
+.score-lbl { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+.score-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.score-val span { font-size: 14px; color: var(--muted); }
+
+.footer-btns { display: flex; gap: 8px; }
+
+.btn-sm {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted2);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-sm:hover { border-color: var(--gold-dim); color: var(--gold); }
+.btn-sm.gold { background: var(--gold); color: #000; border-color: var(--gold); font-weight: 700; }
+
+/* ── CALENDAR PAGE ── */
+.cal-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 20px 100px;
+}
+
+.cal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 28px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 4px;
+}
+
+.cal-sub {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  position: relative;
+  overflow: hidden;
+}
+
+.cal-day.perfect { background: var(--gold-glow); border-color: var(--gold-dim); }
+.cal-day.partial { background: #0e1208; border-color: #2a3a1a; }
+.cal-day.today { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+.cal-day.future { opacity: 0.3; }
+
+.cal-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: var(--muted);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.cal-day.perfect .cal-num { color: var(--gold); }
+.cal-day.partial .cal-num { color: #8aaa6a; }
+.cal-day.today .cal-num { color: #fff; }
+
+.cal-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  margin-top: 3px;
+  background: transparent;
+}
+
+.cal-day.perfect .cal-dot { background: var(--gold); }
+.cal-day.partial .cal-dot { background: #6aaa4a; }
+
+.cal-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted2);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+/* ── SUMMARY PAGE ── */
+.summary-wrap {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 20px 100px;
+}
+
+.summary-hero {
+  background: linear-gradient(135deg, #1a1200, #0d0d0d);
+  border: 1px solid var(--gold-dim);
+  border-radius: 14px;
+  padding: 24px 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.summary-trophy { font-size: 48px; margin-bottom: 8px; }
+
+.summary-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  line-height: 1;
+}
+
+.summary-sub {
+  font-size: 12px;
+  color: var(--muted2);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-val {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  line-height: 1;
+}
+
+.stat-lbl {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.best-habits {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.best-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 12px;
+}
+
+.best-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #1a1a1a;
+  font-size: 13px;
+}
+
+.best-row:last-child { border-bottom: none; }
+.best-row-name { color: var(--text); }
+.best-row-pct {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--gold);
+  letter-spacing: 1px;
+}
+
+/* Save/Load modal */
+.modal-bg {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-bg.open { display: flex; }
+
+.modal {
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 20px;
+  width: 100%;
+  max-width: 380px;
+}
+
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  margin-bottom: 6px;
+}
+
+.modal-desc {
+  font-size: 12px;
+  color: var(--muted2);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.modal-code {
+  background: #0a0a0a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--gold);
+  word-break: break-all;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.modal-input {
+  width: 100%;
+  background: #0a0a0a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text);
+  margin-bottom: 12px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.modal-input:focus { outline: 1px solid var(--gold-dim); }
+
+.modal-btns { display: flex; gap: 8px; }
+
+.btn-modal {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  transition: opacity 0.2s;
+}
+
+.btn-modal:hover { opacity: 0.85; }
+.btn-modal.primary { background: var(--gold); color: #000; }
+.btn-modal.secondary { background: var(--card2); color: var(--muted2); border: 1px solid var(--border); }
+
+/* Celebration */
+.celebration {
+  display: none;
+  text-align: center;
+  padding: 24px 16px 8px;
+}
+.celebration.show { display: block; }
+.cel-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--gold);
+  letter-spacing: 4px;
+}
+.cel-sub { font-size: 12px; color: var(--muted); margin-top: 4px; letter-spacing: 1px; }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">T<em>—</em>BOOST</div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('today')">Today</button>
+      <button class="nav-tab" onclick="showPage('calendar')">30 Days</button>
+      <button class="nav-tab" onclick="showPage('summary')">Stats</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ TODAY PAGE ══ -->
+<div class="page active" id="page-today">
+
+  <div class="today-header">
+    <div class="day-row">
+      <div class="day-title">
+        <span>30-DAY CHALLENGE</span>
+        <span id="dayLabel" style="font-size:38px;color:var(--gold);">DAY 1</span>
+      </div>
+      <div class="streak-pill">
+        <div class="streak-fire">🔥</div>
+        <div class="streak-num" id="streakNum">0</div>
+        <div class="streak-label">Streak</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-section">
+    <div class="prog-meta">
+      <span>DAILY PROGRESS</span>
+      <strong id="progText">0 / 13</strong>
+    </div>
+    <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+
+  <div class="habits-wrap">
+
+    <div class="cat-label">☀️ &nbsp;Morning</div>
+
+    <div class="habit" onclick="toggle(this)" data-id="sun" data-pts="10">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">30 Minutes in the Sun</div>
+        <div class="habit-desc">Boosts Vitamin D & morning cortisol reset</div>
+      </div>
+      <div class="habit-pts">+10</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="cold" data-pts="8">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">Cold Shower</div>
+        <div class="habit-desc">Raises testosterone & increases alertness</div>
+      </div>
+      <div class="habit-pts">+8</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="grounding" data-pts="6">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">10 Min Grounding</div>
+        <div class="habit-desc">Bare feet on grass/earth — reduces cortisol & inflammation</div>
+      </div>
+      <div class="habit-pts">+6</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="nophone" data-pts="5">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">No Phone First 30 Min</div>
+        <div class="habit-desc">Lowers cortisol spike from overnight stress response</div>
+      </div>
+      <div class="habit-pts">+5</div>
+    </div>
+
+    <div class="cat-label">🥩 &nbsp;Nutrition</div>
+
+    <div class="habit" onclick="toggle(this)" data-id="protein" data-pts="10">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">Hit Your Protein Target</div>
+        <div class="habit-desc">0.8–1g per lb bodyweight — supports muscle & hormones</div>
+      </div>
+      <div class="habit-pts">+10</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="nosugar" data-pts="8">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">No Processed Sugar</div>
+        <div class="habit-desc">Sugar spikes insulin which suppresses testosterone</div>
+      </div>
+      <div class="habit-pts">+8</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="zinc" data-pts="5">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">Zinc-Rich Food</div>
+        <div class="habit-desc">Oysters, red meat, pumpkin seeds — critical mineral for T</div>
+      </div>
+      <div class="habit-pts">+5</div>
+    </div>
+
+    <div class="cat-label">💪 &nbsp;Training</div>
+
+    <div class="habit" onclick="toggle(this)" data-id="lift" data-pts="12">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">Compound Lift Session</div>
+        <div class="habit-desc">Squats, deadlifts, bench — heavy lifts spike testosterone</div>
+      </div>
+      <div class="habit-pts">+12</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="steps" data-pts="6">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">10,000 Steps</div>
+        <div class="habit-desc">Daily movement lowers cortisol & supports hormonal balance</div>
+      </div>
+      <div class="habit-pts">+6</div>
+    </div>
+
+    <div class="cat-label">🧠 &nbsp;Recovery</div>
+
+    <div class="habit" onclick="toggle(this)" data-id="sleep" data-pts="12">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">8 Hours Sleep</div>
+        <div class="habit-desc">70% of daily testosterone is produced during deep sleep</div>
+      </div>
+      <div class="habit-pts">+12</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="noalc" data-pts="8">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">No Alcohol</div>
+        <div class="habit-desc">Alcohol directly lowers testosterone for up to 24 hours</div>
+      </div>
+      <div class="habit-pts">+8</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="meditate" data-pts="6">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">10 Min Meditation / Breathing</div>
+        <div class="habit-desc">Lowers chronic cortisol — the main testosterone killer</div>
+      </div>
+      <div class="habit-pts">+6</div>
+    </div>
+
+    <div class="habit" onclick="toggle(this)" data-id="noporn" data-pts="9">
+      <div class="cb"><div class="ck">✓</div></div>
+      <div class="habit-info">
+        <div class="habit-name">No Pornography</div>
+        <div class="habit-desc">Preserves dopamine sensitivity and natural drive</div>
+      </div>
+      <div class="habit-pts">+9</div>
+    </div>
+
+    <div class="celebration" id="celebration">
+      <div class="cel-title">PERFECT DAY 🔥</div>
+      <div class="cel-sub">Maximum T-Boost activated. See you tomorrow.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ CALENDAR PAGE ══ -->
+<div class="page" id="page-calendar">
+  <div class="cal-wrap">
+    <div class="cal-title">30-DAY CHALLENGE</div>
+    <div class="cal-sub" id="calSub">Track your journey day by day</div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--gold);"></div> Perfect day</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#6aaa4a;"></div> Partial</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div> Not started</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SUMMARY PAGE ══ -->
+<div class="page" id="page-summary">
+  <div class="summary-wrap">
+    <div class="summary-hero">
+      <div class="summary-trophy" id="summaryTrophy">📊</div>
+      <div class="summary-title" id="summaryTitle">YOUR PROGRESS</div>
+      <div class="summary-sub" id="summarySub">Keep going — results take consistency</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="statDays">0</div>
+        <div class="stat-lbl">Days Logged</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statStreak">0</div>
+        <div class="stat-lbl">Best Streak</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statPerfect">0</div>
+        <div class="stat-lbl">Perfect Days</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="statAvg">0%</div>
+        <div class="stat-lbl">Avg Completion</div>
+      </div>
+    </div>
+
+    <div class="best-habits" id="bestHabits">
+      <div class="best-title">HABIT COMPLETION RATE</div>
+      <div id="habitRows"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div class="footer">
+  <div class="footer-inner">
+    <div class="score-block">
+      <div class="score-lbl">Today's Score</div>
+      <div class="score-val" id="scoreVal">0 <span id="scoreMax"></span></div>
+    </div>
+    <div class="footer-btns">
+      <button class="btn-sm" onclick="openSave()">💾 Save</button>
+      <button class="btn-sm" onclick="openLoad()">📂 Load</button>
+      <button class="btn-sm" onclick="resetToday()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- SAVE MODAL -->
+<div class="modal-bg" id="saveModal">
+  <div class="modal">
+    <div class="modal-title">💾 Save Progress</div>
+    <div class="modal-desc">Copy this code and keep it safe — in Notes, WhatsApp yourself, or anywhere. Use it to restore your progress on any device.</div>
+    <div class="modal-code" id="saveCode"></div>
+    <div class="modal-btns">
+      <button class="btn-modal primary" onclick="copyCode()">Copy Code</button>
+      <button class="btn-modal secondary" onclick="closeSave()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- LOAD MODAL -->
+<div class="modal-bg" id="loadModal">
+  <div class="modal">
+    <div class="modal-title">📂 Load Progress</div>
+    <div class="modal-desc">Paste your save code below to restore your progress from another device.</div>
+    <textarea class="modal-input" id="loadInput" placeholder="Paste your save code here..."></textarea>
+    <div class="modal-btns">
+      <button class="btn-modal primary" onclick="loadCode()">Restore</button>
+      <button class="btn-modal secondary" onclick="closeLoad()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── HABITS CONFIG ──
+const HABITS = [
+  { id:'sun',       name:'30 Min in the Sun',          pts:10 },
+  { id:'cold',      name:'Cold Shower',                pts:8  },
+  { id:'grounding', name:'10 Min Grounding',           pts:6  },
+  { id:'nophone',   name:'No Phone First 30 Min',      pts:5  },
+  { id:'protein',   name:'Hit Your Protein Target',    pts:10 },
+  { id:'nosugar',   name:'No Processed Sugar',         pts:8  },
+  { id:'zinc',      name:'Zinc-Rich Food',             pts:5  },
+  { id:'lift',      name:'Compound Lift Session',      pts:12 },
+  { id:'steps',     name:'10,000 Steps',               pts:6  },
+  { id:'sleep',     name:'8 Hours Sleep',              pts:12 },
+  { id:'noalc',     name:'No Alcohol',                 pts:8  },
+  { id:'meditate',  name:'Meditation / Breathing',     pts:6  },
+  { id:'noporn',    name:'No Pornography',             pts:9  },
+];
+
+const MAX_PTS = HABITS.reduce((a,h) => a+h.pts, 0);
+const TOTAL   = HABITS.length;
+
+// ── STATE ──
+let state = {}; // { 'YYYY-MM-DD': { sun: true, cold: false, ... } }
+let startDate = null;
+
+function todayKey() {
+  return new Date().toISOString().split('T')[0];
+}
+
+function dayIndex(dateStr) {
+  if (!startDate) return 1;
+  const ms = new Date(dateStr) - new Date(startDate);
+  return Math.floor(ms / 86400000) + 1;
+}
+
+function currentDay() {
+  return Math.min(dayIndex(todayKey()), 30);
+}
+
+// ── STORAGE ──
+function loadFromStorage() {
+  try {
+    const s = localStorage.getItem('tboost_state');
+    if (s) state = JSON.parse(s);
+    startDate = localStorage.getItem('tboost_start') || todayKey();
+    if (!localStorage.getItem('tboost_start')) {
+      localStorage.setItem('tboost_start', startDate);
+    }
+  } catch(e) { state = {}; startDate = todayKey(); }
+}
+
+function saveToStorage() {
+  localStorage.setItem('tboost_state', JSON.stringify(state));
+  localStorage.setItem('tboost_start', startDate);
+}
+
+function getTodayHabits() {
+  const k = todayKey();
+  if (!state[k]) state[k] = {};
+  return state[k];
+}
+
+// ── TOGGLE ──
+function toggle(el) {
+  const id = el.dataset.id;
+  const today = getTodayHabits();
+  today[id] = !today[id];
+  el.classList.toggle('done', !!today[id]);
+  saveToStorage();
+  updateUI();
+}
+
+// ── UI ──
+function updateUI() {
+  const today = getTodayHabits();
+  let done = 0, pts = 0;
+
+  document.querySelectorAll('.habit').forEach(el => {
+    const id = el.dataset.id;
+    const isDone = !!today[id];
+    el.classList.toggle('done', isDone);
+    if (isDone) {
+      done++;
+      pts += parseInt(el.dataset.pts);
+    }
+  });
+
+  const pct = Math.round((pts / MAX_PTS) * 100);
+  document.getElementById('progFill').style.width = pct + '%';
+  document.getElementById('progText').textContent = done + ' / ' + TOTAL;
+  document.getElementById('scoreVal').innerHTML = pts + ' <span>/ ' + MAX_PTS + ' pts</span>';
+  document.getElementById('dayLabel').textContent = 'DAY ' + currentDay();
+
+  // Streak
+  const streak = calcStreak();
+  document.getElementById('streakNum').textContent = streak;
+
+  // Celebration
+  document.getElementById('celebration').classList.toggle('show', done === TOTAL);
+}
+
+function calcStreak() {
+  let streak = 0;
+  let d = new Date();
+  while (true) {
+    const k = d.toISOString().split('T')[0];
+    const h = state[k] || {};
+    const done = HABITS.filter(hab => h[hab.id]).length;
+    if (done === 0 && k !== todayKey()) break;
+    if (done > 0) streak++;
+    d.setDate(d.getDate() - 1);
+    if (dayIndex(k) <= 1) break;
+  }
+  return streak;
+}
+
+// ── PAGES ──
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.target.classList.add('active');
+
+  if (name === 'calendar') renderCalendar();
+  if (name === 'summary') renderSummary();
+}
+
+// ── CALENDAR ──
+function renderCalendar() {
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = '';
+  const today = todayKey();
+  const todayDayIdx = currentDay();
+
+  document.getElementById('calSub').textContent =
+    'Day ' + todayDayIdx + ' of 30 — ' + (30 - todayDayIdx) + ' days remaining';
+
+  for (let i = 1; i <= 30; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i - 1);
+    const k = d.toISOString().split('T')[0];
+    const h = state[k] || {};
+    const done = HABITS.filter(hab => h[hab.id]).length;
+    const isFuture = k > today;
+    const isToday = k === today;
+
+    const el = document.createElement('div');
+    el.className = 'cal-day';
+    if (isFuture) el.classList.add('future');
+    else if (done === TOTAL) el.classList.add('perfect');
+    else if (done > 0) el.classList.add('partial');
+    if (isToday) el.classList.add('today');
+
+    el.innerHTML = '<div class="cal-num">' + i + '</div><div class="cal-dot"></div>';
+    grid.appendChild(el);
+  }
+}
+
+// ── SUMMARY ──
+function renderSummary() {
+  const today = todayKey();
+  let daysLogged = 0, perfectDays = 0, totalCompletion = 0;
+  const habitCounts = {};
+  HABITS.forEach(h => habitCounts[h.id] = 0);
+
+  let bestStreak = 0, cur = 0;
+
+  for (let i = 1; i <= 30; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i - 1);
+    const k = d.toISOString().split('T')[0];
+    if (k > today) break;
+
+    const h = state[k] || {};
+    const done = HABITS.filter(hab => h[hab.id]).length;
+
+    if (done > 0) {
+      daysLogged++;
+      totalCompletion += done / TOTAL;
+      if (done === TOTAL) { perfectDays++; cur++; }
+      else cur = 0;
+      bestStreak = Math.max(bestStreak, cur);
+      HABITS.forEach(hab => { if (h[hab.id]) habitCounts[hab.id]++; });
+    } else { cur = 0; }
+  }
+
+  const avg = daysLogged > 0 ? Math.round((totalCompletion / daysLogged) * 100) : 0;
+
+  document.getElementById('statDays').textContent = daysLogged;
+  document.getElementById('statStreak').textContent = bestStreak;
+  document.getElementById('statPerfect').textContent = perfectDays;
+  document.getElementById('statAvg').textContent = avg + '%';
+
+  // Trophy state
+  const day = currentDay();
+  if (day >= 30 && perfectDays >= 25) {
+    document.getElementById('summaryTrophy').textContent = '🏆';
+    document.getElementById('summaryTitle').textContent = 'CHALLENGE COMPLETE';
+    document.getElementById('summarySub').textContent = 'You did it. Testosterone optimised.';
+  } else if (perfectDays >= 10) {
+    document.getElementById('summaryTrophy').textContent = '🔥';
+    document.getElementById('summaryTitle').textContent = 'ON FIRE';
+    document.getElementById('summarySub').textContent = 'Keep the momentum going';
+  }
+
+  // Habit rows — sorted by completion rate
+  const sorted = [...HABITS].sort((a,b) => habitCounts[b.id] - habitCounts[a.id]);
+  const rows = document.getElementById('habitRows');
+  rows.innerHTML = '';
+  sorted.forEach(h => {
+    const pct = daysLogged > 0 ? Math.round((habitCounts[h.id] / Math.max(daysLogged,1)) * 100) : 0;
+    const row = document.createElement('div');
+    row.className = 'best-row';
+    row.innerHTML = '<span class="best-row-name">' + h.name + '</span><span class="best-row-pct">' + pct + '%</span>';
+    rows.appendChild(row);
+  });
+}
+
+// ── SAVE / LOAD ──
+function openSave() {
+  const data = { state, startDate, v: 1 };
+  const code = btoa(JSON.stringify(data));
+  document.getElementById('saveCode').textContent = code;
+  document.getElementById('saveModal').classList.add('open');
+}
+
+function closeSave() {
+  document.getElementById('saveModal').classList.remove('open');
+}
+
+function copyCode() {
+  const code = document.getElementById('saveCode').textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    const btn = event.target;
+    btn.textContent = 'Copied! ✓';
+    setTimeout(() => btn.textContent = 'Copy Code', 2000);
+  });
+}
+
+function openLoad() {
+  document.getElementById('loadInput').value = '';
+  document.getElementById('loadModal').classList.add('open');
+}
+
+function closeLoad() {
+  document.getElementById('loadModal').classList.remove('open');
+}
+
+function loadCode() {
+  try {
+    const code = document.getElementById('loadInput').value.trim();
+    const data = JSON.parse(atob(code));
+    if (!data.state || !data.startDate) throw new Error();
+    state = data.state;
+    startDate = data.startDate;
+    saveToStorage();
+    closeLoad();
+    updateUI();
+    alert('Progress restored! ✓');
+  } catch(e) {
+    alert('Invalid code — please check and try again.');
+  }
+}
+
+function resetToday() {
+  if (!confirm('Reset today\'s habits?')) return;
+  const k = todayKey();
+  state[k] = {};
+  saveToStorage();
+  updateUI();
+}
+
+// ── INIT ──
+loadFromStorage();
+updateUI();
+</script>
+
+</body>
+</html>
